@@ -8,5 +8,5 @@ import android.arch.persistence.room.RoomDatabase
  */
 @Database(entities = [Snippet::class],version = 1)
 abstract class CodePlayDB: RoomDatabase() {
-
+    abstract fun getSnippetDao(): SnippetDao
 }
