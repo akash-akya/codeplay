@@ -4,12 +4,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/v3.0.0/mini-default.min.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/solarized-light.min.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script type="text/javascript" src="syntax_highlight.js"></script>
     <script src="biwascheme.js"></script>
@@ -25,25 +32,33 @@
   </head>
 
   <body>
+    <div class="container">
+      <form>
+        <div id="codeContainer" class="form-group">
+          <pre>
+            <code id="code" class="scheme"></code>
+          </pre>
+        </div>
 
-    <pre>
-      <code id="code" class="scheme"></code>
-    </pre>
+        <div id="editCodeContainer" class="form-group">
+          <textarea class="form-control" id="editCodeText" spellcheck="false">
+          </textarea>
+        </div>
 
+        <div class="col-lg-3 center-block" style="display: table;">
+          <form class="form-inline">
+            <div class="form-group">
+              <input type="button"class="btn btn-default" value="Run" onclick="runCode();" />
+              <input type="button"class="btn btn-default" value="Edit" id="editButton" onclick="editCode();" />
+              <input type="button"class="btn btn-default" value="Done" id="doneButton" onclick="updateCode();" />
+            </div>
+          </form>
+        </div>
 
-    <div class="row">
-      <textarea id="editCode" spellcheck="false" style="width: 90%; min-height: 100px;">
-      </textarea>
+      </form>
+
+      <h3 class="form-control-static" id="result"></h3>
     </div>
-
-
-    <input type="button" value="Run" onclick="runCode();" />
-    <input type="button" value="Edit" id="editButton"  onclick="editCode();" />
-    <input type="button" value="Done" id="doneButton" onclick="updateCode();" />
-
-    <p>=></p>
-    <h3 id="result"></h3>
-
 
     <script>
       $(document).ready(() => {

@@ -25,29 +25,29 @@ const runCode = () => {
 };
 
 const showEdit = () => {
-    $("#editCode").show();
+    $("#editCodeContainer").show();
     $("#doneButton").show();
 
-    $("#code").hide();
+    $("#codeContainer").hide();
     $("#editButton").hide();
 };
 
 const hideEdit = () => {
-    $("#editCode").hide();
+    $("#editCodeContainer").hide();
     $("#doneButton").hide();
 
-    $("#code").show();
+    $("#codeContainer").show();
     $("#editButton").show();
 };
 
 const editCode = () => {
     code = $("#code").text();
-    $("#editCode").val(code.trim());
+    $("#editCodeText").val(code.trim());
     showEdit();
 };
 
 const updateCode = () => {
-    code = $("#editCode").val();
+    code = $("#editCodeText").val();
     $("#code").text(code);
     refreshHighlight();
 
