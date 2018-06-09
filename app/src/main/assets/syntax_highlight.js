@@ -3,7 +3,7 @@
 // skewer.log(codeText);
 
 const loadCode = (codeText) => {
-    block = document.getElementById("#code");
+    block = document.getElementById("code");
     block.textContent = codeText;
     refreshHighlight();
 };
