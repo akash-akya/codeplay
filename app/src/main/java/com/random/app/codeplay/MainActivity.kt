@@ -1,6 +1,7 @@
 package com.random.app.codeplay
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
@@ -24,12 +25,12 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import java.nio.file.Files.size
-
-
-
-
-
-
+import android.graphics.BitmapRegionDecoder
+import android.graphics.Rect
+import pl.aprilapps.easyphotopicker.DefaultCallback
+import pl.aprilapps.easyphotopicker.EasyImage
+import java.io.File
+import java.io.FileInputStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupPermissions()
         initFam()
+        initWebView()
     }
 
     private fun setupPermissions() {
@@ -100,33 +102,34 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFam() {
-        famAdd.setOnFloatingActionsMenuUpdateListener(object : FloatingActionsMenu.OnFloatingActionsMenuUpdateListener {
-            override fun onMenuExpanded() {
-                rlFamBg.visibility = View.VISIBLE
-            }
-
-            override fun onMenuCollapsed() {
-                rlFamBg.visibility = View.GONE
-            }
-        })
-
-
-        fabAddGallery = com.getbase.floatingactionbutton.FloatingActionButton(this)
-        fabAddGallery.title = "Gallery"
-        fabAddGallery.setIcon(R.drawable.ic_collections_black_24dp)
-        fabAddGallery.colorNormal = ContextCompat.getColor(this, R.color.colorAccent)
-        fabAddGallery.setOnClickListener { takePictureFromGallery() }
-        fabAddGallery.size = com.getbase.floatingactionbutton.FloatingActionButton.SIZE_MINI
-
-        fabAddCamera = com.getbase.floatingactionbutton.FloatingActionButton(this)
-        fabAddCamera.title = "Camera"
-        fabAddCamera.setIcon(R.drawable.ic_photo_camera_black_24dp)
-        fabAddCamera.colorNormal = ContextCompat.getColor(this, R.color.colorAccent)
-        fabAddCamera.setOnClickListener{ }
-        fabAddCamera.size = com.getbase.floatingactionbutton.FloatingActionButton.SIZE_MINI
-
-        famAdd.addButton(fabAddGallery)
-        famAdd.addButton(fabAddCamera)
+        fbAdd.setOnClickListener { EasyImage.openChooserWithDocuments(this,"Choose from",PICK_IMAGE_MULTIPLE) }
+//        famAdd.setOnFloatingActionsMenuUpdateListener(object : FloatingActionsMenu.OnFloatingActionsMenuUpdateListener {
+//            override fun onMenuExpanded() {
+//                rlFamBg.visibility = View.VISIBLE
+//            }
+//
+//            override fun onMenuCollapsed() {
+//                rlFamBg.visibility = View.GONE
+//            }
+//        })
+//
+//
+//        fabAddGallery = com.getbase.floatingactionbutton.FloatingActionButton(this)
+//        fabAddGallery.title = "Gallery"
+//        fabAddGallery.setIcon(R.drawable.ic_collections_black_24dp)
+//        fabAddGallery.colorNormal = ContextCompat.getColor(this, R.color.colorAccent)
+//        fabAddGallery.setOnClickListener { takePictureFromGallery() }
+//        fabAddGallery.size = com.getbase.floatingactionbutton.FloatingActionButton.SIZE_MINI
+//
+//        fabAddCamera = com.getbase.floatingactionbutton.FloatingActionButton(this)
+//        fabAddCamera.title = "Camera"
+//        fabAddCamera.setIcon(R.drawable.ic_photo_camera_black_24dp)
+//        fabAddCamera.colorNormal = ContextCompat.getColor(this, R.color.colorAccent)
+//        fabAddCamera.setOnClickListener{ }
+//        fabAddCamera.size = com.getbase.floatingactionbutton.FloatingActionButton.SIZE_MINI
+//
+//        famAdd.addButton(fabAddGallery)
+//        famAdd.addButton(fabAddCamera)
     }
 
     private fun takeFromCamera() {
@@ -155,48 +158,63 @@ class MainActivity : AppCompatActivity() {
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
 
-        if (famAdd != null && famAdd.isExpanded)
-            famAdd.collapse()
+//        if (famAdd != null && famAdd.isExpanded)
+//            famAdd.collapse()
 
-        try {
-            // When an Image is picked
+//        try {
+//            // When an Image is picked
+//
+//
+//            if (requestCode == PICK_IMAGE_MULTIPLE && resultCode == Activity.RESULT_OK
+//                    && null != data) {
+//                // Get the Image from data
+//                val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+//
+//                if (data.data != null) {
+//
+//                    val mImageUri = data.data
+////                    val decoder = BitmapRegionDecoder.newInstance(mImageUri.toString(), false)
+////                    val region = decoder.decodeRegion(Rect(10, 10, 50, 50), null)
+//                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, mImageUri)
+//                    processBitmap(bitmap)
+//                    Log.d("Result"," uri :$mImageUri")
+//
+//                    // Get the cursor
+//                    val cursor = contentResolver.query(mImageUri,
+//                            filePathColumn, null, null, null)
+//                    // Move to first row
+//
+//
+//                    cursor?.moveToFirst()
+//
+//                    val columnIndex = cursor!!.getColumnIndex(filePathColumn[0])
+//
+////                    imageEncoded = cursor.getString(columnIndex)
+//                    cursor.close()
+//
+//                }
+//                }
+//            } catch (e: Exception) {
+//
+//            e.printStackTrace()
+//
+//            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
+//                    .show()
+//        }
 
-
-            if (requestCode == PICK_IMAGE_MULTIPLE && resultCode == Activity.RESULT_OK
-                    && null != data) {
-                // Get the Image from data
-                val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
-
-                if (data.data != null) {
-
-                    val mImageUri = data.data
-                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, mImageUri)
+        EasyImage.handleActivityResult(requestCode,resultCode,data,this,object :DefaultCallback (){
+            override fun onImagePicked(imageFile: File?, source: EasyImage.ImageSource?, type: Int) {
+//                val mImageUri = imageFile?.pa
+////                    val decoder = BitmapRegionDecoder.newInstance(mImageUri.toString(), false)
+////                    val region = decoder.decodeRegion(Rect(10, 10, 50, 50), null)
+                val options = BitmapFactory.Options()
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                val bitmap = BitmapFactory.decodeStream(FileInputStream(imageFile),null,options)
+//                    val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, mImageUri)
                     processBitmap(bitmap)
-                    Log.d("Result"," uri :$mImageUri")
+            }
 
-                    // Get the cursor
-                    val cursor = contentResolver.query(mImageUri,
-                            filePathColumn, null, null, null)
-                    // Move to first row
-
-
-                    cursor?.moveToFirst()
-
-                    val columnIndex = cursor!!.getColumnIndex(filePathColumn[0])
-
-//                    imageEncoded = cursor.getString(columnIndex)
-                    cursor.close()
-
-                }
-                }
-            } catch (e: Exception) {
-
-            e.printStackTrace()
-
-            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
-                    .show()
-        }
-
+        })
 
 
         super.onActivityResult(requestCode, resultCode, data)
@@ -206,6 +224,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun processBitmap(bitmap: Bitmap) {
         Log.d("Result"," uri :${bitmap.height}")
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun initWebView() {
+        codeView.settings.javaScriptEnabled = true
+
+    }
+
+    private fun displayCode(code: String) {
+        val url = "javascript:loadCode($code)"
+        codeView.loadUrl(url)
     }
 
 
