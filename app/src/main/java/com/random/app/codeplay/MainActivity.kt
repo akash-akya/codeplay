@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private val RC_TAKE_PHOTO = 2
     private lateinit var fabAddGallery: FloatingActionButton
     private lateinit var fabAddCamera: FloatingActionButton
+    private val  INDEX_FILE = "file:///android_asset/index.html"
 
     var PICK_IMAGE_MULTIPLE = 1
 
@@ -224,16 +225,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun processBitmap(bitmap: Bitmap) {
         Log.d("Result"," uri :${bitmap.height}")
+        displayCode("(+ 45 56)")
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initWebView() {
         codeView.settings.javaScriptEnabled = true
-
+        codeView.loadUrl(INDEX_FILE)
     }
 
     private fun displayCode(code: String) {
-        val url = "javascript:loadCode($code)"
+        val url = "javascript:loadCode('$code');"
         codeView.loadUrl(url)
     }
 
